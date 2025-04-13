@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpeakSpace - Educational Platform</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.3/cdn.min.js" defer></script>
+  <style>
+    .hero-gradient {
+      background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    .session-card:hover .join-btn {
+      opacity: 1;
+    }
+    .custom-shape-divider {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+    }
+    .custom-shape-divider svg {
+      position: relative;
+      display: block;
+      width: calc(100% + 1.3px);
+      height: 80px;
+    }
+    .custom-shape-divider .shape-fill {
+      fill: #FFFFFF;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm" x-data="{ open: false }">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="text-indigo-600 font-bold text-2xl">SpeakSpace</span>
+          </div>
+          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <a href="#" class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              Home
+            </a>
+            <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              Sessions
+            </a>
+            <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              About Us
+            </a>
+            <a href="{{ url_for('login') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              Sign Up
+            </a>
+          </div>
+        </div>
+        <div class="hidden sm:ml-6 sm:flex sm:items-center">
+          <button class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <span class="sr-only">View notifications</span>
+            <i class="fa fa-bell"></i>
+          </button>
+
+          <!-- Profile dropdown -->
+          <div class="ml-3 relative" x-data="{ open: false }">
+            <div>
+              <button @click="open = !open" class="bg-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="user-menu-button">
+                <span class="sr-only">Open user menu</span>
+                <img class="h-8 w-8 rounded-full" src="/api/placeholder/32/32" alt="User profile">
+              </button>
+            </div>
+            <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu">
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Your Profile</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
+            </div>
+          </div>
+        </div>
+        <div class="-mr-2 flex items-center sm:hidden">
+          <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+            <span class="sr-only">Open main menu</span>
+            <i x-show="!open" class="fas fa-bars"></i>
+            <i x-show="open" class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div x-show="open" class="sm:hidden">
+      <div class="pt-2 pb-3 space-y-1">
+        <a href="#" class="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Home</a>
+        <a href="#" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Courses</a>
+        <a href="#" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Sessions</a>
+        <a href="#" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Teachers</a>
+      </div>
+      <div class="pt-4 pb-3 border-t border-gray-200">
+        <div class="flex items-center px-4">
+          <div class="flex-shrink-0">
+            <img class="h-10 w-10 rounded-full" src="/api/placeholder/40/40" alt="User profile">
+          </div>
+          <div class="ml-3">
+            <div class="text-base font-medium text-gray-800">Student Name</div>
+            <div class="text-sm font-medium text-gray-500">student@example.com</div>
+          </div>
+        </div>
+        <div class="mt-3 space-y-1">
+          <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Your Profile</a>
+          <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Settings</a>
+          <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Sign out</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="relative hero-gradient">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+      <div class="lg:flex lg:items-center lg:justify-between">
+        <div class="lg:w-1/2">
+          <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
+            Learn Without Limits
+          </h1>
+          <p class="mt-3 max-w-md mx-auto text-lg text-indigo-100 sm:text-xl md:mt-5 md:max-w-3xl">
+            Connect with expert teachers, join interactive sessions, and advance your knowledge in a collaborative online environment.
+          </p>
+          <div class="mt-10 sm:flex">
+            <div class="rounded-md shadow">
+              <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
+                Get Started
+              </a>
+            </div>
+            <div class="mt-3 sm:mt-0 sm:ml-3">
+              <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-500 bg-opacity-60 hover:bg-opacity-70 md:py-4 md:text-lg md:px-10">
+                Explore Sessions
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="mt-12 lg:mt-0 lg:w-1/2">
+          <img class="w-full rounded-lg shadow-xl" src="/api/placeholder/640/360" alt="Students learning">
+        </div>
+      </div>
+    </div>
+    <div class="custom-shape-divider">
+      <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="shape-fill"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="bg-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="relative bg-white pt-5 px-4 pb-6 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg">
+          <dt>
+            <div class="absolute bg-indigo-500 rounded-md p-3">
+              <i class="fas fa-users fa-lg text-white"></i>
+            </div>
+            <p class="ml-16 text-sm font-medium text-gray-500 truncate">Active Students</p>
+          </dt>
+          <dd class="ml-16 flex items-baseline">
+            <p class="text-2xl font-semibold text-gray-900">5,000+</p>
+          </dd>
+        </div>
+
+        <div class="relative bg-white pt-5 px-4 pb-6 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg">
+          <dt>
+            <div class="absolute bg-indigo-500 rounded-md p-3">
+              <i class="fas fa-chalkboard-teacher fa-lg text-white"></i>
+            </div>
+            <p class="ml-16 text-sm font-medium text-gray-500 truncate">Expert Teachers</p>
+          </dt>
+          <dd class="ml-16 flex items-baseline">
+            <p class="text-2xl font-semibold text-gray-900">200+</p>
+          </dd>
+        </div>
+
+        <div class="relative bg-white pt-5 px-4 pb-6 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg">
+          <dt>
+            <div class="absolute bg-indigo-500 rounded-md p-3">
+              <i class="fas fa-video fa-lg text-white"></i>
+            </div>
+            <p class="ml-16 text-sm font-medium text-gray-500 truncate">Live Sessions</p>
+          </dt>
+          <dd class="ml-16 flex items-baseline">
+            <p class="text-2xl font-semibold text-gray-900">1,000+</p>
+          </dd>
+        </div>
+
+        <div class="relative bg-white pt-5 px-4 pb-6 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg">
+          <dt>
+            <div class="absolute bg-indigo-500 rounded-md p-3">
+              <i class="fas fa-graduation-cap fa-lg text-white"></i>
+            </div>
+            <p class="ml-16 text-sm font-medium text-gray-500 truncate">Subjects</p>
+          </dt>
+          <dd class="ml-16 flex items-baseline">
+            <p class="text-2xl font-semibold text-gray-900">50+</p>
+          </dd>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upcoming Sessions -->
+  <div class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+          Upcoming Sessions
+        </h2>
+        <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
+          Join our interactive live sessions conducted by expert teachers
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-6 lg:grid-cols-3 lg:gap-8">
+        <!-- Session 1 -->
+        <div class="session-card flex flex-col rounded-lg shadow-lg overflow-hidden transition-all duration-300 card-hover bg-white">
+          <div class="flex-shrink-0 relative">
+            <img class="h-48 w-full object-cover" src="/api/placeholder/400/192" alt="Advanced Mathematics">
+            <div class="absolute top-0 right-0 m-2 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded">
+              LIVE SOON
+            </div>
+          </div>
+          <div class="flex-1 bg-white p-6 flex flex-col justify-between">
+            <div class="flex-1">
+              <p class="text-sm font-medium text-indigo-600">
+                <a href="#" class="hover:underline">
+                  Mathematics
+                </a>
+              </p>
+              <a href="#" class="block mt-2">
+                <p class="text-xl font-semibold text-gray-900">
+                  Advanced Calculus: Integrals & Applications
+                </p>
+                <p class="mt-3 text-base text-gray-500">
+                  Learn advanced techniques for solving complex integrals and their real-world applications.
+                </p>
+              </a>
+            </div>
+            <div class="mt-6 flex items-center">
+              <div class="flex-shrink-0">
+                <a href="#">
+                  <img class="h-10 w-10 rounded-full" src="/api/placeholder/40/40" alt="Teacher">
+                </a>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm font-medium text-gray-900">
+                  <a href="#" class="hover:underline">
+                    Prof. Jennifer Lee
+                  </a>
+                </p>
+                <div class="flex space-x-1 text-sm text-gray-500">
+                  <time datetime="2023-03-16">Today</time>
+                  <span aria-hidden="true">&middot;</span>
+                  <span>4:00 PM</span>
+                </div>
+              </div>
+              <div class="ml-auto">
+                <button class="join-btn bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-medium py-2 px-4 rounded-md transition-all opacity-75">
+                  Join
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Session 2 -->
+        <div class="session-card flex flex-col rounded-lg shadow-lg overflow-hidden transition-all duration-300 card-hover bg-white">
+          <div class="flex-shrink-0 relative">
+            <img class="h-48 w-full object-cover" src="/api/placeholder/400/192" alt="Computer Science Session">
+            <div class="absolute top-0 right-0 m-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">
+              ENROLLMENT OPEN
+            </div>
+          </div>
+          <div class="flex-1 bg-white p-6 flex flex-col justify-between">
+            <div class="flex-1">
+              <p class="text-sm font-medium text-indigo-600">
+                <a href="#" class="hover:underline">
+                  Computer Science
+                </a>
+              </p>
+              <a href="#" class="block mt-2">
+                <p class="text-xl font-semibold text-gray-900">
+                  Introduction to Machine Learning
+                </p>
+                <p class="mt-3 text-base text-gray-500">
+                  Explore the fundamentals of machine learning algorithms and their practical implementations.
+                </p>
+              </a>
+            </div>
+            <div class="mt-6 flex items-center">
+              <div class="flex-shrink-0">
+                <a href="#">
+                  <img class="h-10 w-10 rounded-full" src="/api/placeholder/40/40" alt="Teacher">
+                </a>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm font-medium text-gray-900">
+                  <a href="#" class="hover:underline">
+                    Dr. Michael Chen
+                  </a>
+                </p>
+                <div class="flex space-x-1 text-sm text-gray-500">
+                  <time datetime="2023-03-16">Tomorrow</time>
+                  <span aria-hidden="true">&middot;</span>
+                  <span>2:30 PM</span>
+                </div>
+              </div>
+              <div class="ml-auto">
+                <button class="join-btn bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-medium py-2 px-4 rounded-md transition-all opacity-75">
+                  Enroll
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Session 3 -->
+        <div class="session-card flex flex-col rounded-lg shadow-lg overflow-hidden transition-all duration-300 card-hover bg-white">
+          <div class="flex-shrink-0 relative">
+            <img class="h-48 w-full object-cover" src="/api/placeholder/400/192" alt="Literature Session">
+            <div class="absolute top-0 right-0 m-2 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded">
+              LIVE SOON
+            </div>
+          </div>
+          <div class="flex-1 bg-white p-6 flex flex-col justify-between">
+            <div class="flex-1">
+              <p class="text-sm font-medium text-indigo-600">
+                <a href="#" class="hover:underline">
+                  Literature
+                </a>
+              </p>
+              <a href="#" class="block mt-2">
+                <p class="text-xl font-semibold text-gray-900">
+                  Modern Literature Analysis
+                </p>
+                <p class="mt-3 text-base text-gray-500">
+                  Dive deep into contemporary literary works and develop critical analysis skills.
+                </p>
+              </a>
+            </div>
+            <div class="mt-6 flex items-center">
+              <div class="flex-shrink-0">
+                <a href="#">
+                  <img class="h-10 w-10 rounded-full" src="/api/placeholder/40/40" alt="Teacher">
+                </a>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm font-medium text-gray-900">
+                  <a href="#" class="hover:underline">
+                    Prof. Sarah Johnson
+                  </a>
+                </p>
+                <div class="flex space-x-1 text-sm text-gray-500">
+                  <time datetime="2023-03-16">Today</time>
+                  <span aria-hidden="true">&middot;</span>
+                  <span>6:00 PM</span>
+                </div>
+              </div>
+              <div class="ml-auto">
+                <button class="join-btn bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-medium py-2 px-4 rounded-md transition-all opacity-75">
+                  Join
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-10">
+        <a href="#" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          View All Sessions
+          <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="bg-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="lg:text-center">
+        <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">Features</h2>
+        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          Everything you need for effective learning
+        </p>
+        <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+          Our platform offers a comprehensive set of tools for students, teachers, and administrators.
+        </p>
+      </div>
+
+      <div class="mt-10">
+        <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+          <div class="relative">
+            <dt>
+              <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                <i class="fas fa-video"></i>
+              </div>
+              <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Interactive Live Sessions</p>
+            </dt>
+            <dd class="mt-2 ml-16 text-base text-gray-500">
+              Engage in real-time with teachers and fellow students through our interactive live session platform.
+            </dd>
+          </div>
+
+          <div class="relative">
+            <dt>
+              <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                <i class="fas fa-calendar-alt"></i>
+              </div>
+              <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Session Scheduling</p>
+            </dt>
+            <dd class="mt-2 ml-16 text-base text-gray-500">
+              Teachers can easily schedule and manage sessions, while students receive timely notifications.
+            </dd>
+          </div>
+
+          <div class="relative">
+            <dt>
+              <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                <i class="fas fa-comments"></i>
+              </div>
+              <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Collaborative Learning</p>
+            </dt>
+            <dd class="mt-2 ml-16 text-base text-gray-500">
+              Participate in discussions, group assignments, and peer reviews to enhance learning outcomes.
+            </dd>
+          </div>
+
+          <div class="relative">
+            <dt>
+              <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Progress Tracking</p>
+            </dt>
+            <dd class="mt-2 ml-16 text-base text-gray-500">
+              Monitor your learning journey with detailed progress reports and performance analytics.
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonials -->
+  <div class="bg-indigo-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="lg:text-center">
+        <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">Testimonials</h2>
+        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          What our users say
+        </p>
+      </div>
+
+      <div class="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div class="bg-white rounded-lg shadow-lg p-6 transition-all duration-300 card-hover">
+          <div class="flex items-center mb-4">
+            <img class="h-12 w-12 rounded-full" src="/api/placeholder/48/48" alt="Student">
+            <div class="ml-4">
+              <h4 class="text-lg font-bold text-gray-900">Emma Wilson</h4>
+              <p class="text-sm text-gray-600">Computer Science Student</p>
+            </div>
+          </div>
+          <p class="text-gray-600">
+            "This platform has completely transformed how I learn. The interactive sessions make complex topics easy to understand, and I love being able to connect with teachers directly."
+          </p>
+          <div class="mt-4 flex text-yellow-400">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6 transition-all duration-300 card-hover">
+          <div class="flex items-center mb-4">
+            <img class="h-12 w-12 rounded-full" src="/api/placeholder/48/48" alt="Teacher">
+            <div class="ml-4">
+              <h4 class="text-lg font-bold text-gray-900">Dr. James Peterson</h4>
+              <p class="text-sm text-gray-600">Physics Professor</p>
+            </div>
+          </div>
+          <p class="text-gray-600">
+            "As an educator, this platform gives me all the tools I need to create engaging online sessions. The scheduling system is intuitive, and the interactive features keep students engaged."
+          </p>
+          <div class="mt-4 flex text-yellow-400">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6 transition-all duration-300 card-hover">
+          <div class="flex items-center mb-4">
+            <img class="h-12 w-12 rounded-full" src="/api/placeholder/48/48" alt="Administrator">
+            <div class="ml-4">
+              <h4 class="text-lg font-bold text-gray-900">Maria Rodriguez</h4>
+              <p class="text-sm text-gray-600">School Administrator</p>
+            </div>
+          </div>
+          <p class="text-gray-600">
+            "Managing our online education program has never been easier. The administrative tools are comprehensive, allowing us to oversee all activities while giving teachers the freedom they need."
+          </p>
+          <div class="mt-4 flex text-yellow-400">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="bg-

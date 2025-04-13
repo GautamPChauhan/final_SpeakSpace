@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notifications</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f9f9f9;
+            padding: 20px;
+        }
+
+        .notifications-panel {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .notifications-panel h2 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .notification {
+            padding: 12px 15px;
+            border-left: 4px solid #007bff;
+            background-color: #f1f7ff;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            position: relative;
+            transition: 0.2s;
+        }
+
+        .notification.unread {
+            border-left-color: #28a745;
+            background-color: #eaffea;
+        }
+
+        .notification time {
+            font-size: 0.8rem;
+            color: #666;
+            display: block;
+            margin-top: 6px;
+        }
+
+        .notification:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="notifications-panel">
+    <h2>Your Notifications</h2>
+
+    {% if notifications %}
+        {% for note in notifications %}
+            <div class="notification {% if not note.is_read %}unread{% endif %}">
+                {{ note.message }}
+                <time>{{ note.created_at.strftime("%b %d, %Y %H:%M") }}</time>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No notifications yet.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

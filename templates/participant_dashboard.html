@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Participant Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      background-color: #f4f6f8;
+    }
+    body.dark-mode {
+  background-color: #1c1f26;
+  color: #f1f5f9;
+}
+
+body.dark-mode .sidebar {
+  background-color: #2a2e38;
+  color: #f1f5f9;
+}
+
+body.dark-mode .nav-links a,
+body.dark-mode .settings-link {
+  color: #f1f5f9;
+}
+
+body.dark-mode .nav-links a:hover,
+body.dark-mode .settings-link:hover {
+  background-color: #3b3f4a;
+}
+
+body.dark-mode .topbar {
+  background-color: #2a2e38;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+body.dark-mode .search-bar input {
+  background-color: #2f3340;
+  color: #f1f5f9;
+  border-color: #475569;
+}
+
+body.dark-mode .search-bar input::placeholder {
+  color: #94a3b8;
+}
+
+body.dark-mode .search-bar input:focus {
+  background-color: #1c1f26;
+  box-shadow: 0 0 0 2px rgba(147, 197, 253, 0.2);
+}
+
+body.dark-mode .card {
+  background-color: #2a2e38;
+  color: #f1f5f9;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .card p {
+  color: #cbd5e1;
+}
+
+body.dark-mode .settings-dropdown {
+  background-color: #3b3f4a;
+}
+
+body.dark-mode .settings-dropdown a:hover {
+  background-color: #4b5160;
+}
+
+
+
+    .sidebar {
+      width: 240px;
+      background-color: #2563eb;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 30px 20px;
+      height: 100vh;
+    }
+ 
+    .sidebar h2 {
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 40px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #ffffff;
+      font-size: 15px;
+      padding: 12px 18px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover {
+      background-color: #1d4ed8;
+      transform: translateX(5px);
+    }
+
+    .settings-link {
+      text-decoration: none;
+      color: #ffffff;
+      font-size: 15px;
+      padding: 12px 18px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      cursor: pointer;
+      display: block;
+    }
+
+    .settings-link:hover {
+      background-color: #1d4ed8;
+      transform: translateX(5px);
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background-color: #ffffff;
+      padding: 18px 30px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .search-bar {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 12px 18px;
+      border: 1px solid #d1d5db;
+      border-radius: 25px;
+      font-size: 14px;
+      background: #f9fafb;
+      color: #1e293b;
+      transition: 0.3s ease;
+    }
+
+    .search-bar input::placeholder {
+      color: #9ca3af;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      text-align: center;
+      border-color: #2563eb;
+      background: #ffffff;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+
+    .content {
+      flex: 1;
+      padding: 60px 80px;
+      background-color: #f9fafb;
+    }
+
+    .content h3 {
+      color: #1e2a4a;
+      font-size: 22px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 35px 40px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      margin-bottom: 25px;
+      transition: 0.3s ease;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .card h4 {
+      color: #1e293b;
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .card p {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .section {
+      display: none;
+    }
+
+    #dashboardSection {
+      display: block;
+    }
+
+    .settings-container {
+      position: relative;
+    }
+
+    .settings-dropdown {
+      display: none;
+      flex-direction: column;
+      background-color: #1e40af;
+      position: absolute;
+      bottom: 50px;
+      left: 0;
+      width: 200px;
+      padding: 10px;
+      border-radius: 10px;
+      z-index: 10;
+    }
+
+    .settings-dropdown a {
+      color: white;
+      padding: 8px 12px;
+      text-decoration: none;
+      font-size: 14px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    .settings-dropdown a:hover {
+      background-color: #1d4ed8;
+    }
+    .session-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .session-card {
+            background-color: white;
+            width: 280px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .session-card:hover {
+            transform: scale(1.03);
+        }
+
+        .session-image {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+        }
+
+        .session-info {
+            padding: 15px;
+        }
+
+        .session-info h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+
+        .session-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+        .container {
+            border: 2px solid #007bff;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 10px;
+            width: 90%;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            text-align: center;
+            color: #007bff;
+        }
+        .session-box {
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+        .session-box h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .session-box p {
+            margin: 5px 0;
+        }
+        .join-btn {
+            margin-top: 10px;
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .join-btn:hover {
+            background-color: #0056b3;
+        }
+
+
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div>
+      <h2>SpeakSpace</h2>
+      <div class="nav-links">
+        <a href="#">Dashboard</a>
+        <a href="#">Live Sessions</a>
+        <a href="#">Performance</a>
+        <a href="{{url_for("participant_notifications")}}">Notifications</a>
+      </div>
+    </div>
+    <div class="settings-container">
+      <a href="#" class="settings-link" id="settingsToggle">Settings</a>
+      <div class="settings-dropdown" id="settingsDropdown">
+        <a href="#">Change Theme</a>
+        <a href="#">Profile</a>
+        <a href="#">Change Password</a>
+        <a href="#">Logout</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="search-bar">
+        <input type="text" placeholder="Search anything..." />
+      </div>
+    </div>
+
+    <div id="dashboardSection" class="section">
+    <div class="session-container">
+      {% for session in sessions %}
+      <div class="session-card">
+          
+          <div class="session-info">
+              <h3>{{ session.topic }}</h3>
+              <p><strong>Teacher:</strong> {{ session.teacher_name }}</p>
+              <p><strong>Date:</strong> {{ session.session_date }}</p>
+              <p><strong>Time:</strong> {{ session.start_time }} - {{ session.end_time }}</p>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+  </div>
+  
+
+    
+
+      <div id="livesessionsSection" class="section">
+        <div class="container">
+
+          {% if active_sessions %}
+              {% for active_session in active_sessions %}
+              <div class="session-box">
+                  <h3>{{ active_session.topic }}</h3>
+                  <p><strong>Date:</strong> {{ active_session.date }}</p>
+                  <p><strong>Time:</strong> {{ active_session.time }}</p>
+                  <p><strong>Duration:</strong> {{ active_session.duration }}</p>
+                  <p><strong>Platform:</strong> {{ active_session.platform }}</p>
+                  <a href="{{ session.link }}" class="join-btn" target="_blank">Join Session</a>
+              </div>
+              {% endfor %}
+          {% else %}
+              <p style="text-align:center;">No active sessions at the moment.</p>
+          {% endif %}
+      </div>
+      </div>
+
+      
+        <div id="performanceSection" class="section">
+          <!-- Performance Section -->
+<section id="performanceSection" class="p-6 bg-white rounded-lg shadow-md mt-6">
+  <h2 class="text-2xl font-bold mb-4 text-center">Performance Overview</h2>
+
+  <!-- Performance Summary -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+    <div>
+      <h3 class="text-lg font-semibold">Total Sessions</h3>
+      <p class="text-2xl font-bold text-blue-600">{{ total_sessions }}</p>
+    </div>
+    <div>
+      <h3 class="text-lg font-semibold">Attended Sessions</h3>
+      <p class="text-2xl font-bold text-green-600">{{ attended_sessions }}</p>
+    </div>
+    <div>
+      <h3 class="text-lg font-semibold">Missed Sessions</h3>
+      <p class="text-2xl font-bold text-red-600">{{ total_sessions - attended_sessions }}</p>
+    </div>
+    <div>
+      <h3 class="text-lg font-semibold">Attendance Rate</h3>
+      <p class="text-2xl font-bold text-purple-600">
+        {{ '%.2f' | format((attended_sessions / total_sessions * 100) if total_sessions > 0 else 0) }}%
+      </p>
+    </div>
+  </div>
+
+  <!-- Chart Container -->
+  <div class="chart-container mt-8 mx-auto">
+    <h3 class="text-xl mb-2 text-center">Participation Overview</h3>
+    <canvas id="activityChart"></canvas>
+  </div>
+</section>
+
+<!-- Responsive Chart Styling -->
+<style>
+  .chart-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  #activityChart {
+    width: 100% !important;
+    height: auto !important;
+  }
+</style>
+
+<!-- Chart.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('activityChart').getContext('2d');
+  const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: ['Attended', 'Missed'],
+          datasets: [{
+              label: 'Session Participation',
+              data: [{{ attended_sessions }}, {{ total_sessions - attended_sessions }}],
+              backgroundColor: ['#4CAF50', '#F44336'],
+              borderColor: ['#388E3C', '#D32F2F'],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  ticks: {
+                      stepSize: 1
+                  }
+              }
+          }
+      }
+  });
+</script>
+
+  
+        </div>
+      
+
+      <div id="feedbackSection" class="section">
+        <h3>Feedback</h3>
+        <p>All feedback provided by mentors will be shown here.</p>
+      </div>
+
+      <div id="notificationsSection" class="section">
+        <h3>Notifications</h3>
+        <p>All the latest alerts and notifications.</p>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const links = document.querySelectorAll('.nav-links a');
+    const sections = document.querySelectorAll('.section');
+
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const sectionId = link.textContent.trim().toLowerCase().replace(/\s+/g, '') + 'Section';
+
+        sections.forEach(section => {
+          section.style.display = 'none';
+        });
+
+        const activeSection = document.getElementById(sectionId);
+        if (activeSection) {
+          activeSection.style.display = 'block';
+        }
+      });
+    });
+
+    const settingsToggle = document.getElementById('settingsToggle');
+    const settingsDropdown = document.getElementById('settingsDropdown');
+
+    settingsToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      settingsDropdown.style.display =
+        settingsDropdown.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!settingsToggle.contains(e.target) && !settingsDropdown.contains(e.target)) {
+        settingsDropdown.style.display = 'none';
+      }
+    });
+
+    const themeToggle = document.querySelector('#settingsDropdown a:first-child');
+
+    themeToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.body.classList.toggle('dark-mode');
+    });
+
+</script>
+
+</body>
+</html>

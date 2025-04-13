@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SpeakSpace Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #4158d0, #c850c0);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      display: flex;
+      width: 900px;
+      height: 600px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+    
+    .left-panel {
+      flex: 1;
+      background: linear-gradient(rgba(65, 88, 208, 0.7), rgba(200, 80, 192, 0.7)), url('/api/placeholder/500/600');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .left-panel h2 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+    
+    .left-panel p {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    
+    .feature-list {
+      list-style: none;
+      margin-bottom: 30px;
+    }
+    
+    .feature-list li {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .feature-list i {
+      margin-right: 10px;
+      font-size: 20px;
+    }
+    
+    .testimonial {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: auto;
+    }
+    
+    .testimonial p {
+      font-size: 14px;
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+    }
+    
+    .testimonial-author img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    
+    .right-panel {
+      flex: 1;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    
+    .logo span {
+      background: linear-gradient(135deg, #4158d0, #c850c0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .logo p {
+      font-size: 15px;
+      color: #666;
+    }
+    
+    .login-form input {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: none;
+      background: #f5f5f5;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .login-form input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(65, 88, 208, 0.3);
+      background: #fff;
+    }
+    
+    .login-form .password-field {
+      position: relative;
+    }
+    
+    .login-form .password-field i {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+      cursor: pointer;
+    }
+    
+    .remember-forgot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .remember-me {
+      display: flex;
+      align-items: center;
+    }
+    
+    .remember-me input {
+      margin-right: 8px;
+      width: auto;
+      margin-bottom: 0;
+    }
+    
+    .remember-me label {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .forgot-password a {
+      font-size: 14px;
+      color: #4158d0;
+      text-decoration: none;
+    }
+    
+    .login-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #4158d0, #c850c0);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+    }
+    
+    .login-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(65, 88, 208, 0.3);
+    }
+    
+    .social-login {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .social-login p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+      position: relative;
+    }
+    
+    .social-login p::before,
+    .social-login p::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      height: 1px;
+      background: #ddd;
+    }
+    
+    .social-login p::before {
+      left: 0;
+    }
+    
+    .social-login p::after {
+      right: 0;
+    }
+    
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+    .social-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: #f5f5f5;
+      color: #333;
+      transition: all 0.3s ease;
+    }
+    
+    .social-icons a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .register-link {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .register-link a {
+      color: #4158d0;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    
+    @media (max-width: 900px) {
+      .container {
+        width: 100%;
+        height: auto;
+        flex-direction: column;
+      }
+      
+      .left-panel {
+        display: none;
+      }
+      
+      .right-panel {
+        padding: 40px 30px;
+      }
+      .login-form select {
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: none;
+        background: #f5f5f5;
+        border-radius: 10px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        appearance: none;
+      }
+      
+      .login-form select:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(65, 88, 208, 0.3);
+        background: #fff;
+      }
+
+      .error {
+        color: red;
+        font-size: 14px;
+        margin-top: 4px;
+      }
+      
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-panel">
+      <div>
+        <h2>Welcome to SpeakSpace</h2>
+        <p>Elevate your communication skills and excel in group discussions and interviews through our interactive platform.</p>
+        
+        <ul class="feature-list">
+          <li><i class="fas fa-comments"></i> Practice GD with AI participants</li>
+          <li><i class="fas fa-laptop"></i> Virtual mock interviews</li>
+          <li><i class="fas fa-chart-line"></i> Detailed feedback & analytics</li>
+          <li><i class="fas fa-users"></i> Connect with peers</li>
+        </ul>
+      </div>
+      
+      <div class="testimonial">
+        <p>"SpeakSpace transformed my interview performance. I gained confidence and secured my dream job."</p>
+        <div class="testimonial-author">
+          <img src="/api/placeholder/40/40" alt="User">
+          <div>
+            <strong>Sarah Johnson</strong>
+            <div>Software Engineer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="right-panel">
+      <div class="logo">
+        <h1>Speak<span>Space</span></h1>
+        <p>Sharpen your GD & Interview skills</p>
+      </div>
+      
+      <form class="login-form" method="POST">
+        <div class="input-field">
+          <input type="email" name="email" placeholder="Email address" value="{{ form_data.email if form_data.email }}">
+          {% if errors.email %}
+            <div class="error">{{ errors.email }}</div>
+          {% endif %}
+        </div>
+        
+        <div class="password-field">
+          <input type="password" name="password" placeholder="Password">
+          <i class="fas fa-eye-slash"></i>
+          {% if errors.password %}
+            <div class="error">{{ errors.password }}</div>
+          {% endif %}
+        </div>
+      
+        <div class="remember-forgot">
+          <div class="forgot-password">
+            <a href="#">Forgot password?</a>
+          </div>
+        </div>
+      
+        <button type="submit" class="login-btn">Log in</button>
+      </form>
+     
+     
+      
+      <div class="social-login">
+        <p>Or continue with</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-google"></i></a>
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      
+      <div class="register-link">
+        Don't have an account? <a href="{{ url_for('register') }}">Sign up</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
